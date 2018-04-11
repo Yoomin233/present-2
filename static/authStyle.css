@@ -1,0 +1,72 @@
+.inputForm {
+  width: 80%;
+  height: 300px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 1px solid #ddd;
+  padding-top: 50px;
+}
+
+.inputContainer {
+  display: flex;
+  font-size: 0;
+  border: 1px solid #eee;
+  height: 50px;
+  width: 90%;
+  margin: auto;
+}
+
+input {
+  width: 16.6%;
+  border: none;
+  text-align: center;
+  line-height: 50px;
+  font-size: 35px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+button {
+  outline: none;
+  border: 1px solid #eee;
+}
+
+input:focus {
+  outline: none;
+  border: none;
+}
+
+input:not(:last-child) {
+  border-right: 1px solid #eee;
+}
+
+button {
+  display: block;
+  margin: 50px auto;
+  font-size: 25px;
+  background-color: #fff;
+  border-color: #eee;
+}
+
+.bounce {
+  animation: bounce 0.3s ease-in-out 1;
+}
+
+@keyframes bounce {
+  25% {
+    transform: translateX(-20%);
+  }
+  50% {
+    transform: translateX(20%);
+  }
+  75% {
+    transform: translateX(-20%);
+  }
+  100% {
+    transform: none;
+  }
+}

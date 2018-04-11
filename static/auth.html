@@ -20,22 +20,19 @@
       <input type="number" name='pwd6'>
     </div>
     <input type="text" name='valueContainer' class='valueContainer' style='display: none;'>
+    <input type="text" name='currentTime' class='currentTimeContainer' style='display: none;'>
     <button type='submit' class='submit'>submit</button>
   </form>
   <div class="audioContainer">
-    <audio src="/static/sounds/1.wav"></audio>
-    <audio src="/static/sounds/2.wav"></audio>
-    <audio src="/static/sounds/3.wav"></audio>
-    <audio src="/static/sounds/4.wav"></audio>
-    <audio src="/static/sounds/5.wav"></audio>
-    <audio src="/static/sounds/6.wav"></audio>
-    <audio src="/static/sounds/7.wav"></audio>
+    <audio src="/static/sounds/kenny_chesney_me_and_you.mp3" autoplay loop></audio>
   </div>
   <script>
-    const inputContainer = document.querySelector('.inputContainer')
-    const inputValue = ''
     const keyword = '123456'
-    const pianoSoundsArr = Array.from(document.querySelectorAll('audio'))
+    const inputContainer = document.querySelector('.inputContainer')
+
+    const songElem = document.querySelector('audio')
+    songElem.volume = 0.1
+    const audioElem = document.querySelector('audio')
     inputContainer.addEventListener('keyup', e => {
       // debugger
       if (!/[0-9]|Backspace/.test(e.key)) {
@@ -51,7 +48,7 @@
       }
       if (e.keyCode === 8) {
         // pianoSoundsArr[6].stop()
-        pianoSoundsArr[6].play()
+        // pianoSoundsArr[6].play()
         if (inputIndex > 0) {
           e.preventDefault()
           e.srcElement.value = ''
@@ -60,7 +57,7 @@
         const value = document.querySelector('.valueContainer').value
         document.querySelector('.valueContainer').value = value.slice(0, value.length - 1)
       } else {
-        pianoSoundsArr[inputIndex].play()
+        // pianoSoundsArr[inputIndex].play()
         if (inputIndex < inputsArr.length - 1) {
           inputsArr[inputIndex + 1].focus()
         } else {
@@ -68,6 +65,7 @@
         }
         document.querySelector('.valueContainer').value += e.key
       }
+      audioElem.volume = 0.1 + document.querySelector('.valueContainer').value.length * 0.15
     })
     document.querySelector('input').focus()
     document.querySelector('form').addEventListener('submit', (e) => {
@@ -76,7 +74,10 @@
       const submittedValue = document.querySelector('input.valueContainer').value
       if (submittedValue === keyword) {
         submitBtn.setAttribute('disabled', true)
-        setTimeout(() => document.querySelector('form').submit(), 3000)
+        setTimeout(() => {
+          document.querySelector('.currentTimeContainer').value = audioElem.currentTime
+          document.querySelector('form').submit()
+        }, 3000)
       } else {
         submitBtn.classList.add('bounce')
         submitBtn.setAttribute('disabled', true)

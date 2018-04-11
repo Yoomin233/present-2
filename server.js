@@ -35,15 +35,21 @@ http
     // } else {
     //   req.cookie.visitCount = 1
     // }
-    if (req.url === '/' && req.method === 'GET') {
+    if (/^\/($|\?.*$)/.test(req.url) && req.method === 'GET') {
       res.writeHead(200, {
         'Content-Type': 'text/html'
       })
+      // 如果根据cookie已经通过认证
       if (req.cookie.auth) {
-        res.end(`Hello! You should see this page after auth pass!`)
+        const content = await fse.readFile(
+          path.join(__dirname, './static/main.html')
+        )
+        res.end(content)
       } else {
         // 跳转到认证页面
-        const content = await fse.readFile('./static/auth.html')
+        const content = await fse.readFile(
+          path.join(__dirname, './static/auth.html')
+        )
         res.end(content)
       }
     } else if (req.url.includes('/validate') && req.method === 'POST') {
@@ -57,7 +63,7 @@ http
         if (POST.valueContainer === keyword) {
           req.cookie.auth = true
           res.writeHead(302, {
-            Location: encodeURI('/')
+            Location: encodeURI(`/?time=${POST.currentTime}`)
           })
           res.end('')
           // res.writeHead(200, { 'Content-Type': 'text/plain' })
@@ -85,13 +91,16 @@ http
           res.writeHead(200, `Content-Type: image/${extensionFileName}`)
           break
         case 'mp3':
-          res.writeHead(200, `Content-Type: video/${extensionFileName}`)
-          break
-        case 'wav':
-          res.writeHead(200, `Content-Type: video/${extensionFileName}`)
-          break
+          res.writeHead(200, {
+            'Content-Type': `audio/${extensionFileName}`,
+            'Accept-Ranges': 'bytes'
+          })
+          return
         case 'ogg':
-          res.writeHead(200, `Content-Type: image/${extensionFileName}`)
+          res.writeHead(
+            200,
+            `Content-Type: image/${extensionFileName}, Accept-Ranges: bytes`
+          )
           break
         default:
           res.writeHead(200, { 'Content-Type': 'text/plain' })

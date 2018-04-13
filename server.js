@@ -30,21 +30,28 @@ http
       storage[randomTicket] = {}
       req.cookie = storage[randomTicket]
     }
-    // if (req.cookie.visitCount) {
-    //   req.cookie.visitCount++
-    // } else {
-    //   req.cookie.visitCount = 1
-    // }
+    // '/' or '/?qs=value', but not '/url/'
     if (/^\/($|\?.*$)/.test(req.url) && req.method === 'GET') {
       res.writeHead(200, {
         'Content-Type': 'text/html'
       })
       // 如果根据cookie已经通过认证
       if (req.cookie.auth) {
-        const content = await fse.readFile(
+        const htmlContent = await fse.readFile(
           path.join(__dirname, './static/main.html')
         )
-        res.end(content)
+        const jsonContent = await fse.readJson(
+          path.join(__dirname, './content.json'),
+          { encoding: 'utf-8' }
+        )
+        const letterContent = jsonContent.content
+        const outputString = htmlContent
+          .toString()
+          .replace(
+            /<div class="scrollContainer">\s*<\/div>/,
+            `<div class="scrollContainer">${letterContent}</div>`
+          )
+        res.end(Buffer.from(outputString))
       } else {
         // 跳转到认证页面
         const content = await fse.readFile(

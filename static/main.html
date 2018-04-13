@@ -29,6 +29,42 @@
       font-size: 150%;
       box-sizing: border-box;
     }
+
+    div.wadget {
+      position: absolute;
+    }
+
+    div.wadget1 {
+      top: 10vh;
+      left: 5vw;
+      width: 10vw;
+      height: 10vw;
+      border: 1px solid black;
+      transition: opacity .5s linear, transform .4s cubic-bezier(0.15, 0.81, 0.27, 1.55);
+      opacity: 0;
+      transform: rotate(45deg);
+    }
+
+    div.wadget1.showed {
+      opacity: 1;
+      transform: none;
+    }
+
+    div.wadget2 {
+      top: 10vh;
+      right: 5vw;
+      width: 10vw;
+      height: 10vw;
+      border: 1px solid black;
+      transition: opacity .5s linear, transform .4s cubic-bezier(0.15, 0.81, 0.27, 1.55);
+      opacity: 0;
+      transform: rotate(45deg);
+    }
+
+    div.wadget2.showed {
+      opacity: 1;
+      transform: none;
+    }
   </style>
 </head>
 
@@ -37,18 +73,10 @@
     <!-- <audio src="/static/sounds/kenny_chesney_me_and_you.mp3" loop preload></audio> -->
   </div>
   <div class="scrollContainer">
-    David is using hidden text to produce student tests (hidden text not printed) and teacher answer sheets (hidden text printed).
-    He has a need, however, to print a placeholder, such as a series of underlines, on the student test and the answer on
-    the teacher's sheet. For instance "Stop when you see a _________ light" would be on the test printout, but "Stop when
-    you see a RED light" would be on the answer sheet printout. Hidden text doesn't seem to handle this need, so David wonders
-    if there is a better way. Actually, there are several ways this can be approached. Hidden text cannot be used in the
-    way that David envisions, but there are other ways to tackle the problem. 工作区 程序员进行开发改动的地方，是你当前看到的，也是最新的。 平常我们开发就是拷贝远程仓库中的一个分支，基于该分支进行开发。在开发过程中就是对工作区的操作。
-    暂存区 .git目录下的index文件, 暂存区会记录git add添加文件的相关信息(文件名、大小、timestamp...)，不保存文件实体, 通过id指向每个文件实体。可以使用git status查看暂存区的状态。暂存区标记了你当前工作区中，哪些内容是被git管理的。
-    当你完成某个需求或功能后需要提交到远程仓库，那么第一步就是通过git add先提交到暂存区，被git管理。 本地仓库 保存了对象被提交 过的各个版本，比起工作区和暂存区的内容，它要更旧一些。 git commit后同步index的目录树到本地仓库，方便从下一步通过git
-    push同步本地仓库与远程仓库的同步。 远程仓库 远程仓库的内容可能被分布在多个地点的处于协作关系的本地仓库修改，因此它可能与本地仓库同步，也可能不同步，但是它的内容是最旧的。 小结 任何对象都是在工作区中诞生和被修改； 任何修改都是从进入index区才开始被版本控制；
-    只有把修改提交到本地仓库，该修改才能在仓库中留下痕迹； 与协作者分享本地的修改，可以把它们push到远程仓库来共享。 下面这幅图更加直接阐述了四个区域之间的关系，可能有些命令不太清楚，没关系，下部分会详细介绍。 作者：Ruheng 链接：
-    https://www.jianshu.com/p/072587b47515 來源：简书 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
   </div>
+  <div class="wadget wadget1"></div>
+  <div class="wadget wadget2"></div>
+
   <script>
     // const playedTime = location.search.match(/\d+/) ? location.search.match(/\d+/)[0] : 0
     // const audioElem = document.querySelector('audio')
@@ -58,20 +86,83 @@
     const totalScrollable = contentContainer.scrollHeight - contentContainer.offsetHeight
 
     let touchingFlag = false
+    function throttle(func, interval) {
+      let now = Date.now()
+      return (...args) => {
+        if (Date.now() - now > interval) {
+          now = Date.now()
+          return func(...args)
+        }
+      }
+    }
     function scrollMain() {
       const currentScrollTop = contentContainer.scrollTop
       if (contentContainer.scrollTop < totalScrollable) {
         !touchingFlag && (contentContainer.scrollTop += 1)
-        setTimeout(scrollMain, 33)
+        setTimeout(scrollMain, 40)
+      } else {
+        setTimeout(scrollMain, 100)
       }
     }
     scrollMain()
-    contentContainer.addEventListener('mouseover', e => {
-      touchingFlag = true
-    })
+    // contentContainer.addEventListener('mouseover', e => {
+    //   touchingFlag = true
+    // })
     contentContainer.addEventListener('mouseleave', e => {
       touchingFlag = false
     })
+    contentContainer.addEventListener('mouseenter', e => {
+      touchingFlag = true
+    })
+    contentContainer.addEventListener('touchstart', e => {
+      touchingFlag = true
+    })
+    contentContainer.addEventListener('touchend', e => {
+      touchingFlag = false
+    })
+
+    function toggleShowStatus({
+      actions
+    }) {
+      return (direction, currentPosition) => {
+        if (direction === 'down') {
+          const latestMatchs = actions.filter(action => currentPosition > action.position)
+          const latestMatch = latestMatchs[latestMatchs.length - 1]
+          if (latestMatch) {
+            latestMatch.element.classList.add(latestMatch.className)
+          }
+        } else if (direction === 'up') {
+          const latestMatchs = actions.filter(action => currentPosition < action.position)
+          const latestMatch = latestMatchs[0]
+          if (latestMatch) {
+            latestMatch.element.classList.remove(latestMatch.className)
+          }
+        }
+      }
+    }
+    const wrappedToggleShowStatus = toggleShowStatus({
+      actions: [{
+        element: document.querySelector('div.wadget1'),
+        position: 0.2,
+        className: 'showed'
+      }, {
+        element: document.querySelector('div.wadget2'),
+        position: 0.4,
+        className: 'showed'
+      }]
+    })
+
+    let latestScrollTop = 0
+    contentContainer.addEventListener('scroll', throttle((e) => {
+      const currentScrollTop = contentContainer.scrollTop
+      // 向下滚动
+      if (currentScrollTop > latestScrollTop) {
+        wrappedToggleShowStatus('down', currentScrollTop / totalScrollable)
+      } else {
+        wrappedToggleShowStatus('up', currentScrollTop / totalScrollable)
+      }
+      latestScrollTop = currentScrollTop
+    }, 50))
   </script>
 </body>
 

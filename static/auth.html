@@ -11,6 +11,8 @@
 
 <body>
   <form action="/validate" method='post' class='inputForm'>
+    亲爱的: 你的生日是哪一天?
+    <br>
     <div class="inputContainer">
       <input type="number" name='pwd1'>
       <input type="number" name='pwd2'>
@@ -21,13 +23,13 @@
     </div>
     <input type="text" name='valueContainer' class='valueContainer' style='display: none;'>
     <input type="text" name='currentTime' class='currentTimeContainer' style='display: none;'>
-    <button type='submit' class='submit'>submit</button>
+    <button type='submit' class='submit'>是这一天么?</button>
   </form>
   <div class="audioContainer">
     <audio src="/static/sounds/kenny_chesney_me_and_you.mp3" autoplay loop></audio>
   </div>
   <script>
-    const keyword = '123456'
+    const keyword = '950423'
     const inputContainer = document.querySelector('.inputContainer')
 
     const songElem = document.querySelector('audio')

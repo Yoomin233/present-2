@@ -1,3 +1,12 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+body {
+  background: url('/static/imgs/bg.png') center / contain repeat-y;
+}
 .inputForm {
   width: 80%;
   height: 300px;
@@ -9,6 +18,9 @@
   margin: auto;
   border: 1px solid #ddd;
   padding-top: 50px;
+  font-size: 1.5em;
+  text-align: center;
+  color: rgb(158, 158, 158);
 }
 
 .inputContainer {
@@ -32,7 +44,11 @@ input {
 
 button {
   outline: none;
-  border: 1px solid #eee;
+  /* border: 1px solid rgb(214, 83, 83); */
+  border-radius: 10px;
+  background-color: #f18698;
+  color: rgb(236, 236, 236);
+  padding: 0.2em;
 }
 
 input:focus {
@@ -48,8 +64,6 @@ button {
   display: block;
   margin: 50px auto;
   font-size: 25px;
-  background-color: #fff;
-  border-color: #eee;
 }
 
 .bounce {

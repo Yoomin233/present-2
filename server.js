@@ -5,7 +5,7 @@ const fse = require('fs-extra')
 const path = require('path')
 
 const qs = require('querystring')
-const keyword = '123456'
+const keyword = '950423'
 
 const storage = {}
 http
@@ -95,6 +95,9 @@ http
           res.writeHead(200, `Content-Type: image/${extensionFileName}`)
           break
         case 'jpeg':
+          res.writeHead(200, `Content-Type: image/${extensionFileName}`)
+          break
+        case 'gif':
           res.writeHead(200, `Content-Type: image/${extensionFileName}`)
           break
         case 'mp3':

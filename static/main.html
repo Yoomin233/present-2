@@ -11,11 +11,12 @@
     body {
       height: 100%;
       margin: 0;
+      overflow: hidden;
     }
 
     div.scrollContainer {
       width: 80%;
-      border: 1px solid #eee;
+      /* border: 1px solid rgb(212, 8, 8); */
       padding: 30px 10px;
       height: 80%;
       overflow-y: scroll;
@@ -27,7 +28,9 @@
       top: 0;
       bottom: 0;
       font-size: 150%;
-      box-sizing: border-box;
+      /* box-sizing: border-box; */
+      color: #e5042c;
+      background-color: rgba(255, 255, 255, 0.8)
     }
 
     div.wadget {
@@ -35,40 +38,116 @@
     }
 
     div.wadget1 {
-      top: 10vh;
-      left: 5vw;
-      width: 10vw;
-      height: 10vw;
-      border: 1px solid black;
+      top: 3vh;
+      left: 3vw;
+      width: 30vw;
+      height: 30vw;
+      /* border: 1px solid black; */
       transition: opacity .5s linear, transform .4s cubic-bezier(0.15, 0.81, 0.27, 1.55);
       opacity: 0;
       transform: rotate(45deg);
+      background: url('/static/imgs/spongebob.gif') center / contain no-repeat;
     }
 
     div.wadget1.showed {
       opacity: 1;
-      transform: none;
+      transform: rotate(10deg);
     }
 
     div.wadget2 {
-      top: 10vh;
-      right: 5vw;
-      width: 10vw;
-      height: 10vw;
-      border: 1px solid black;
+      top: 40vh;
+      right: 3vw;
+      width: 25vw;
+      height: 25vw;
       transition: opacity .5s linear, transform .4s cubic-bezier(0.15, 0.81, 0.27, 1.55);
       opacity: 0;
       transform: rotate(45deg);
+      background: url('/static/imgs/Patrick_Star.png') center / contain no-repeat;
     }
 
     div.wadget2.showed {
       opacity: 1;
+      transform: rotate(-10deg);
+    }
+
+    div.cake {
+      font-size: 12vw;
+      color: rgb(231, 111, 131);
+      text-align: center;
+      text-shadow: 0 0 5px rgb(243, 31, 66);
+      position: absolute;
+      width: 100vw;
+      height: 50vh;
+      transform: translateY(100vh);
+      left: 0;
+      top: 25vh;
+      /* border: 1px solid black; */
+      transition: all .5s ease-in-out;
+      background: url('/static/imgs/google-cake-clipart-1.jpg') center / contain no-repeat, rgba(0, 0, 0, 0.05);
+    }
+
+    div.cake.showed {
       transform: none;
+    }
+
+    div.star {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: url('/static/imgs/star.png') center / contain no-repeat;
+      transition: all .3s ease;
+      animation: spin 10s linear infinite;
+      transform-origin: center center;
+    }
+
+    div.star1 {
+      top: 7vw;
+      left: 20vw;
+    }
+
+    div.star2 {
+      top: 4vw;
+      right: 22vw;
+      animation-delay: -3s;
+      animation-duration: 15s;
+    }
+
+    div.star3 {
+      top: 15vw;
+      left: 15vw;
+      animation-duration: 8s;
+    }
+
+    div.star4 {
+      top: 13vw;
+      right: 20vw;
+      animation-delay: -7s;
+      animation-duration: 12s;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0turn);
+      }
+      to {
+        transform: rotate(1turn);
+      }
+    }
+    div.bg1, div.bg2 {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: url('/static/imgs/bg.png') center / contain repeat-y;
     }
   </style>
 </head>
 
 <body>
+  <div class="bg1"></div>
+  <div class="bg2"></div>
   <div class="audioContainer">
     <!-- <audio src="/static/sounds/kenny_chesney_me_and_you.mp3" loop preload></audio> -->
   </div>
@@ -76,6 +155,13 @@
   </div>
   <div class="wadget wadget1"></div>
   <div class="wadget wadget2"></div>
+  <div class="cake">
+    HAPPY BIRTHDAY TO MY MAY!
+    <div class="star star1"></div>
+    <div class="star star2"></div>
+    <div class="star star3"></div>
+    <div class="star star4"></div>
+  </div>
 
   <script>
     // const playedTime = location.search.match(/\d+/) ? location.search.match(/\d+/)[0] : 0
@@ -149,6 +235,10 @@
         element: document.querySelector('div.wadget2'),
         position: 0.4,
         className: 'showed'
+      }, {
+        element: document.querySelector('div.cake'),
+        position: 0.8,
+        className: 'showed'
       }]
     })
 
@@ -162,7 +252,9 @@
         wrappedToggleShowStatus('up', currentScrollTop / totalScrollable)
       }
       latestScrollTop = currentScrollTop
-    }, 50))
+    }, 50), {
+        passive: true
+      })
   </script>
 </body>
 
